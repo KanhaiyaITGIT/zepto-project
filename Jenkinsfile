@@ -1,18 +1,20 @@
 pipeline {
     agent any
-    enviornment {
+    environment {
         PATH = "/opt/maven/bin:$PATH"
     }
 
     stages {
         stage('git clone') {
-            git url: "https://github.com/KanhaiyaITGIT/zepto-project.git", branch: "main"
+            steps {
+                git url: "https://github.com/KanhaiyaITGIT/zepto-project.git", branch: "main"
+            }
         }
 
         stage('code test') {
             steps {
                 echo "test starting.."
-                sh "mvn install package -Dmaven.test.skip=true"
+                sh "mvn clean package -Dmaven.test.skip=true"
                 echo "test succesfully" 
             }
         }
@@ -26,11 +28,11 @@ pipeline {
         }
 
         stage('sonarqube analysisc') {
-           enviornment {
-               sonarHome = tool 'scanner-scanner'
+           environment {
+               sonarHome = tool 'sonar-scanner'
            }
            steps {
-               withSonarQube('sonar-server') {
+               withSonarQubeEnv('sonar-server') {
                    sh "${scannerHome}/bin/sonar-scanner"
                }
            }
