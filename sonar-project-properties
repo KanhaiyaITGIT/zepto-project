@@ -3,4 +3,4 @@ sonar.organization=zeptoproject
 sonar.projectKey=zeptopro_zepto  
 sonar.projectName=zeptoproject           
 sonar.sourceEncoding=UTF-8
-sonar.sources=.
+sonar.sources=src
