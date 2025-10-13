@@ -22,7 +22,7 @@ pipeline {
         stage('code build') {
             steps {
                 echo "generating build report"
-                sh 'mvn surefire:report:report'
+                sh 'mvn surefire-report:report'
                 echo "build succesfully"
             }
         }
