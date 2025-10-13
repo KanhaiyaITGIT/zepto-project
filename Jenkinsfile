@@ -14,7 +14,7 @@ pipeline {
         stage('code test') {
             steps {
                 echo "test starting.."
-                sh "mvn clean package -Dmaven.test.skip=true"
+                sh 'mvn clean package -Dmaven.test.skip=true'
                 echo "test succesfully" 
             }
         }
@@ -22,18 +22,18 @@ pipeline {
         stage('code build') {
             steps {
                 echo "generating build report"
-                sh "mvn surefire:report:report"
+                sh 'mvn surefire:report:report'
                 echo "build succesfully"
             }
         }
 
-        stage('sonarqube analysisc') {
+        stage('sonarqube analysis') {
            environment {
                sonarHome = tool 'sonar-scanner'
            }
            steps {
                withSonarQubeEnv('sonar-server') {
-                   sh "${scannerHome}/bin/sonar-scanner"
+                   sh "${sonarHome}/bin/sonar-scanner"
                }
            }
         }
