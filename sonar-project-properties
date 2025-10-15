@@ -1,6 +1,6 @@
 sonar.verbose=true                    
 sonar.organization=zeptoproject 
-sonar.projectKey=zeptopro_zepto  
-sonar.projectName=zeptoproject           
+sonar.projectKey=zeptoproject_zepto
+sonar.projectName=zepto      
 sonar.sourceEncoding=UTF-8
 sonar.sources=src
