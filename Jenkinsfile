@@ -1,3 +1,4 @@
+Jenkins-pipeline
 pipeline {
     agent any
     environment {
@@ -10,32 +11,37 @@ pipeline {
                 git url: "https://github.com/KanhaiyaITGIT/zepto-project.git", branch: "main"
             }
         }
-
         stage('code test') {
             steps {
-                echo "test starting.."
-                sh 'mvn clean package -Dmaven.test.skip=true'
-                echo "test succesfully" 
+                echo "code testing start..!!"
+                sh "mvn clean package -Dmaven.test.skip=true"
+                echo "test completed"
             }
         }
-
-        stage('code build') {
+        stage('test report') {
             steps {
-                echo "generating build report"
-                sh 'mvn surefire-report:report'
-                echo "build succesfully"
+                echo "report generating..!!"
+                sh "mvn surefire-report:report"
+                echo "report generated"
             }
         }
-
-        stage('sonarqube analysis') {
-           environment {
-               sonarHome = tool 'sonar-scanner'
-           }
-           steps {
-               withSonarQubeEnv('sonar-server') {
-                   sh "${sonarHome}/bin/sonar-scanner"
-               }
-           }
+        stage('sonar analysis') {
+            environment {
+                sonarHome = tool 'sonar-scanner'
+            }
+            steps {
+                echo "code ananlysis starting"
+                withSonarQubeEnv('sonar-server') {
+                    sh "${sonarHome}/bin/sonar-scanner"
+                }
+                echo "analysis completed ✅"
+            }
+        }
+    }
+    post {
+        always {
+            echo "work completed, cleaning workspace"
+            cleanWs()
         }
     }
 }
