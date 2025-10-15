@@ -1,4 +1,3 @@
-Jenkins-pipeline
 pipeline {
     agent any
     environment {
