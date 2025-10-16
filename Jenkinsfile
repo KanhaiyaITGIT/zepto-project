@@ -1,4 +1,5 @@
 pipeline {
+
     agent any
     environment {
         PATH = "/opt/maven/bin:$PATH"
@@ -9,13 +10,6 @@ pipeline {
             steps {
                 echo "git repo cloning"
                 git url: "https://github.com/KanhaiyaITGIT/zepto-project.git", branch: "main"
-            }
-        }
-        stage('code build') {
-            steps {
-                echo "code building start"
-                sh "mvn clean package -Dmaven.test.skip=true"
-                echo "code built ✅"
             }
         }
         stage('code test') {
