@@ -7,39 +7,56 @@ pipeline {
     stages {
         stage('git clone') {
             steps {
+                echo "git repo cloning"
                 git url: "https://github.com/KanhaiyaITGIT/zepto-project.git", branch: "main"
+            }
+        }
+        stage('code build') {
+            steps {
+                echo "code building start"
+                sh "mvn clean package -Dmaven.test.skip=true"
+                echo "code built ✅"
             }
         }
         stage('code test') {
             steps {
-                echo "code testing start..!!"
-                sh "mvn clean package -Dmaven.test.skip=true"
-                echo "test completed"
+                echo "code testing start"
+                sh "mvn test"
+                junit 'target/surefire-reports/*.xml'
+                echo "code tested"
             }
         }
-        stage('test report') {
+        stage('report generate') {
             steps {
-                echo "report generating..!!"
+                echo "generating report"
                 sh "mvn surefire-report:report"
                 echo "report generated"
             }
         }
-        stage('sonar analysis') {
+        stage('sonarqube analysis') {
             environment {
-                sonarHome = tool 'sonar-scanner'
+                sonarHome = tool "sonar-scanner"
             }
             steps {
-                echo "code ananlysis starting"
+                echo "sonarqube analysis starting...!!"
                 withSonarQubeEnv('sonar-server') {
                     sh "${sonarHome}/bin/sonar-scanner"
                 }
-                echo "analysis completed ✅"
+                echo "waiting for quality gates.."
+                waitForQualityGate abortPipeline: true
+                echo "quality gate passed"
             }
         }
     }
     post {
+        success {
+            echo "pipeline completed successfully"
+        }
+        failure {
+            echo "pipeline failed, check logs"
+        }
         always {
-            echo "work completed, cleaning workspace"
+            echo "pipeline completed..cleaning workspacce"
             cleanWs()
         }
     }
