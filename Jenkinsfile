@@ -29,6 +29,7 @@ pipeline {
         stage('sonarqube analysis') {
             environment {
                 sonarHome = tool "sonar-scanner"
+                SONAR_TOKEN = credentials('sonar-crede')
             }
             steps {
                 echo "sonarqube analysis starting...!!"
