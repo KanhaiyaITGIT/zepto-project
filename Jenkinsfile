@@ -36,7 +36,10 @@ pipeline {
                 withSonarQubeEnv('sonar-server') {
                     sh "${sonarHome}/bin/sonar-scanner"
                 }
+        stage('quality gates')
+            steps {    
                 echo "waiting for quality gates.."
+                timeout(time:2, unit: 'MINUTES')
                 waitForQualityGate abortPipeline: true
                 echo "quality gate passed"
             }
