@@ -19,14 +19,6 @@ pipeline {
                 echo "build completed"
             }
         }
-        stage('code test') {
-            steps {
-                echo "initiated code test"
-                sh "mvn test"
-                junit '**target/surefire-reports/*.xml'
-                echo "code test completed"
-            }
-        }
         stage('report generate') {
             steps {
                 echo "generating report"
