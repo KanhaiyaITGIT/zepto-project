@@ -1,5 +1,4 @@
 pipeline {
-
     agent any
     environment {
         PATH = "/opt/maven/bin:$PATH"
@@ -8,15 +7,24 @@ pipeline {
     stages {
         stage('git clone') {
             steps {
-                echo "git repo cloning"
+                echo "cloning git repo"
                 git url: "https://github.com/KanhaiyaITGIT/zepto-project.git", branch: "main"
+                echo "repo cloned successfully, please check further parameters"
+            }
+        }
+        stage('code build') {
+            steps {
+                echo "building code"
+                sh "mvn clean package -Dmaven.test.skip=true"
+                echo "build completed"
             }
         }
         stage('code test') {
             steps {
-                echo "code testing start"
-                sh "mvn clean package"
-                echo "code compiled"
+                echo "initiated code test"
+                sh "mvn test"
+                junit '**target/surefire-reports/*.xml'
+                echo "code test completed"
             }
         }
         stage('report generate') {
@@ -26,34 +34,36 @@ pipeline {
                 echo "report generated"
             }
         }
-        stage('sonarqube analysis') {
+        stage ('Sonarqube analysis') {
             environment {
-                sonarHome = tool "sonar-scanner"
-                SONAR_TOKEN = credentials('sonar-crede')
+                sonarHome = tool 'sonar-scanner'
             }
             steps {
-                echo "sonarqube analysis starting...!!"
+                echo "sonarqube analysis starting"
                 withSonarQubeEnv('sonar-server') {
                     sh "${sonarHome}/bin/sonar-scanner"
                 }
-        stage('quality gates')
-            steps {    
-                echo "waiting for quality gates.."
-                timeout(time:2, unit: 'MINUTES')
-                waitForQualityGate abortPipeline: true
-                echo "quality gate passed"
+                echo 'sonarqube analysis completed'
+            }
+        }
+        stage('Quality Gates') {
+            steps {
+                echo "quality gate analysis"
+                timeout(time: 5, unit: 'MINUTES') {
+                    waitForQualityGates abortPipeline: true
+                }
             }
         }
     }
     post {
         success {
-            echo "pipeline completed successfully"
+            echo "code successfully deployed"
         }
         failure {
-            echo "pipeline failed, check logs"
+            echo "code failed..!!, check the logs"
         }
         always {
-            echo "pipeline completed..cleaning workspacce"
+            echo "cleaning workspace.."
             cleanWs()
         }
     }
