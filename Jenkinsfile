@@ -44,7 +44,7 @@ pipeline {
             steps {
                 echo "quality gate analysis"
                 timeout(time: 5, unit: 'MINUTES') {
-                    waitForQualityGates abortPipeline: true
+                    waitForQualityGate abortPipeline: true
                 }
             }
         }
