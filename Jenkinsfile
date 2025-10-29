@@ -33,7 +33,7 @@ pipeline {
             steps {
                 echo "sonarqube analysis starting"
                 withSonarQubeEnv('sonar-server') {
-                    withCredentials([string(credentialsId: 'sonar-cred', variable: 'SONAR_TOKEN')]){
+                    withCredentials([string(credentialsId: 'sonar-crede', variable: 'SONAR_TOKEN')]){
                     sh "${sonarHome}/bin/sonar-scanner -Dsonar.login=$SONAR_TOKEN"
                     }
                 }
