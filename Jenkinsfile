@@ -34,7 +34,6 @@ pipeline {
                 echo "sonarqube analysis starting"
                 withSonarQubeEnv('sonar-server') {
                     sh "${sonarHome}/bin/sonar-scanner"
-                    }
                 }
                 echo 'sonarqube analysis completed'
             }
