@@ -8,21 +8,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Build step of the code
-        run: echo "building code artificats"
+        run: echo "building code artificats ${{ vars.MY_NAME }}"
 
   test:
     runs-on: ubuntu-latest
     needs: build
     steps:
       - name: testing code
-        run: echo "testing code...!!"
+        run: echo "testing code...!! ${{ vars.MY_NAME }}"
 
   deploy:
     runs-on: ubuntu-latest
     needs: test
     steps :
       - name: deploying the application
-        run: echo "deploying application after test-passed"
+        run: echo "deploying application after test-passed ${{ vars.MY_NAME }}"
         
           
   
