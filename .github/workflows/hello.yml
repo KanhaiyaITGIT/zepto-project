@@ -1,13 +1,23 @@
 name: hello world
 on : workflow_dispatch
 jobs:
-  hello:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: hello
-        run: |
-          echo "welcome to my github profile howare you team"
-          echo "this is my 2nd line of the code which i'm writing now let's see the result"
-          echo "third line is this"
+      - name: Build step of the code
+        run: echo "building code artificats"
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: testing code
+        run: echo "testing code...!!"
+
+  deploy:
+    runs-on: ubuntu-latest
+    steps :
+      - name: deploying the application
+        run: echo "deploying application after test-passed"
+        
           
   
